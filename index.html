@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulaire de Citation</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label,
+    textarea,
+    input {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .preview {
+      margin-top: 20px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+    }
+    .preview img {
+      max-width: 200px;
+      max-height: 200px;
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+  <body>
+    <form id="quoteForm">
+      <label for="citation">Citation :</label>
+      <textarea
+        name="citation"
+        id="citation"
+        rows="5"
+        required
+        placeholder="La condition de possibilité de l’authenticité est la résolution anticipante de l’être-pour-la-mort. 
+        
+        Ce n’est qu’en s’appropriant sa finitude que le Dasein peut se rapporter à lui-même de manière authentique"
+      ></textarea>
+
+      <label for="auteur">Auteur :</label>
+      <input
+        type="text"
+        name="auteur"
+        id="auteur"
+        placeholder="Martin Heidegger"
+        required
+      />
+
+      <label for="source">Source (titre, page, etc.) :</label>
+      <input
+        type="text"
+        name="source"
+        id="source"
+        placeholder="Être et temps, § 53"
+        required
+      />
+
+      <label for="tags"
+        >Tags (séparés par un point-virgule, sans espace) :</label
+      >
+      <input
+        type="text"
+        name="tags"
+        id="tags"
+        placeholder="ex: philosophie;existentialisme"
+        required
+      />
+
+      <label for="photo">Photo :</label>
+      <input type="file" name="photo" id="photo" accept="image/*" />
+      <button type="submit">Sauvegarder</button>
+    </form>
+
+    <div class="preview" id="preview"></div>
+
+    <script>
+      document
+        .getElementById("quoteForm")
+        .addEventListener("submit", function (event) {
+          // Empêche le rechargement de la page
+          event.preventDefault();
+
+          // Récupération des valeurs des champs du formulaire
+          const citation = document.getElementById("citation").value;
+          const auteur = document.getElementById("auteur").value;
+          const source = document.getElementById("source").value;
+          const tagsList = document.getElementById("tags").value;
+          const photo = document.getElementById("photo").files[0];
+
+          // Afficher l'image si un fichier a été sélectionné
+          if (photo) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const img = document.createElement("img");
+              img.src = e.target.result;
+              preview.appendChild(img);
+            };
+            reader.readAsDataURL(photo);
+          }
+
+          const supabase = window.supabase.createClient(
+            "URL",
+            "PUBLIC_API_KEY"
+          );
+          async function saveQuote() {
+            // Récupérer les valeurs du formulaire
+            const content = document.getElementById("citation").value;
+            const author = document.getElementById("auteur").value;
+            const source = document.getElementById("source").value;
+            const tagsInput = document.getElementById("tags").value;
+
+            // Convertir la liste de tags en tableau (en supposant une liste séparée par des points-virgules sans espaces)
+            const tags = tagsInput.split(";");
+
+            // Insertion dans la base de données Supabase
+            const { data, error } = await supabase
+              .from("quote")
+              .insert([{ content, author, source, tag: tags }]);
+
+            // Vérification de l'opération
+            if (error) {
+              console.error(
+                "Erreur lors de l'ajout de la citation :",
+                error.message
+              );
+            } else {
+              console.log("Citation ajoutée avec succès :", data);
+            }
+          }
+          saveQuote();
+        });
+    </script>
+  </body>
+</html>
