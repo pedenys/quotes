@@ -1,4 +1,8 @@
 import { Handlers } from "$fresh/server.ts";
+import crypto from "node:crypto";
+import { Quote } from "../../types/quote.ts";
+
+const SECRET = "blaisepascal";
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
@@ -6,36 +10,47 @@ export const handler: Handlers = {
   },
   async POST(req, _ctx) {
     const form = await req.formData();
-    const author = form.get("author")?.toString();
-    const content = form.get("content")?.toString();
-    const tags = form.get("tags")?.toString();
-    const source = form.get("source")?.toString();
+    const author = form.get("author")?.toString() || "";
+    const content = form.get("content")?.toString() || "";
+    const source = form.get("source")?.toString() || "";
+    const tags = form.get("tags")?.toString() || "";
     const quote = {
       author,
       content,
-      tags,
       source,
+      tags,
     };
 
     const kv = await Deno.openKv();
 
-    const result = await kv.atomic().set(["quote"], quote).commit();
+    const id = generateUniqueId(quote);
+
+    const result = await kv.atomic().set(["quote", id], quote).commit();
 
     const headers = new Headers();
-    console.log({ result });
+
     if (result) {
       headers.set(
         "location",
-        `/quotes/read?author=${author}&content=${content}&tags=${tags}&source=${source}`,
+        `/quotes/read?id=${id}`,
       );
       return new Response(null, {
-        status: 303, // See Other
+        status: 303,
         headers,
       });
     }
     throw new Error("Oupsi, something went wrong");
   },
 };
+
+function generateUniqueId({ author, tags, content }: Quote): string {
+  const combinedString = `${author}${tags}${content}`;
+
+  const hash = crypto.createHmac("sha256", SECRET).update(combinedString)
+    .digest("hex");
+
+  return hash;
+}
 
 export default function AddQuote() {
   return (
