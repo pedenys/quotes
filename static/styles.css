@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Light theme variables */
+  --primary-color: #fff;
+  --secondary-color: #333;
+  --text-color: #2f2f2f;
+  --background-color: #f7f7f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark theme variables */
+    --primary-color: #333;
+    --secondary-color: #666;
+    --text-color: #f7f7f7;
+    --background-color: #2f2f2f;
+  }
+}
+
+html{
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  margin: 2rem;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
