@@ -1,0 +1,41 @@
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { Quote } from "../../types/quote.ts";
+
+type PageData = { quotes: Array<Deno.KvEntry<Quote>> };
+
+export const handler: Handlers = {
+  async GET(req, ctx) {
+    const kv = await Deno.openKv();
+    const iter = kv.list<string>({ prefix: ["quote"] });
+    const result = [];
+    for await (const res of iter) result.push(res);
+    console.log({ "🙂": result });
+
+    if (result) {
+      return ctx.render({ quotes: result });
+    }
+    return new Response("No quote found", {
+      status: 404,
+    });
+  },
+};
+
+export default function ReadQuote({ data }: PageProps<PageData>) {
+  const { quotes } = data;
+  console.log({ data, quotes });
+
+  return quotes.map((q) => q.value).map(({ content, author, tags, source }) => (
+    <>
+      <section>
+        <blockquote class="p-4 my-4 border-s-4 border-gray-300 bg-gray-50 dark:border-gray-500 dark:bg-gray-800">
+          <p class="text-xl italic font-medium leading-relaxed text-gray-900 dark:text-white">
+            "{content}"
+          </p>
+        </blockquote>
+        <p>{author || "–"}{source ? <cite>, {source}</cite> : ""}</p>
+        <p>{tags}</p>
+      </section>
+      <hr class="my-12 h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" />
+    </>
+  ));
+}

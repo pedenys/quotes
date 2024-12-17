@@ -7,6 +7,7 @@ import * as $_app from "./routes/_app.tsx";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $quotes_add from "./routes/quotes/add.tsx";
+import * as $quotes_index from "./routes/quotes/index.tsx";
 import * as $quotes_read from "./routes/quotes/read.tsx";
 import * as $Counter from "./islands/Counter.tsx";
 import type { Manifest } from "$fresh/server.ts";
@@ -18,6 +19,7 @@ const manifest = {
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
     "./routes/quotes/add.tsx": $quotes_add,
+    "./routes/quotes/index.tsx": $quotes_index,
     "./routes/quotes/read.tsx": $quotes_read,
   },
   islands: {
