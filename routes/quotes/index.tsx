@@ -1,10 +1,11 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { Quote } from "../../types/quote.ts";
+import { QuoteEntity } from "../../domain/entities/quotes.ts";
 
-type PageData = { quotes: Array<Deno.KvEntry<Quote>> };
+type PageData = { quotes: any };
 
 export const handler: Handlers = {
-  async GET(req, ctx) {
+  async GET(_req, ctx) {
+    // refactor me
     const kv = await Deno.openKv();
     const iter = kv.list<string>({ prefix: ["quote"] });
     const result = [];

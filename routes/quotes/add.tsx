@@ -1,8 +1,9 @@
 import { Handlers } from "$fresh/server.ts";
 import crypto from "node:crypto";
-import { Quote } from "../../types/quote.ts";
+import { AddQuoteUseCase } from "../../application/useCases/addQuote.ts";
+import { quoteRepository } from "../../infrastructure/repositories/quoteRepositoryImpl.ts";
 
-const SECRET = "blaisepascal";
+export const SECRET = "blaisepascal";
 
 export const handler: Handlers = {
   async GET(_req, ctx) {
@@ -21,11 +22,7 @@ export const handler: Handlers = {
       tags,
     };
 
-    const kv = await Deno.openKv();
-
-    const id = generateUniqueId(quote);
-
-    const result = await kv.atomic().set(["quote", id], quote).commit();
+    const result = new AddQuoteUseCase(quoteRepository);
 
     const headers = new Headers();
 
