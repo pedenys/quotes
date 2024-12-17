@@ -34,7 +34,9 @@ export default function ReadQuote({ data }: PageProps<PageData>) {
         </p>
       </blockquote>
       <p>{author || "–"}{source ? <cite>, {source}</cite> : ""}</p>
-      <p>{tags}</p>
+      {tags?.split(",").map((tag) => (
+        <pre class="bg-gray-200 text-gray-800 px-2 py-1 rounded inline-block font-mono text-sm mr-2">{tag}</pre>
+      ))}
     </section>
   );
 }
