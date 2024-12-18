@@ -1,7 +1,8 @@
 import { Handlers } from "$fresh/server.ts";
 import crypto from "node:crypto";
 import { AddQuoteUseCase } from "../../application/useCases/addQuote.ts";
-import { quoteRepository } from "../../infrastructure/repositories/quoteRepositoryImpl.ts";
+import { myContainer } from "../../dependancyInjection/container.ts";
+import { TYPES } from "../../dependancyInjection/tokens.ts";
 
 export const SECRET = "blaisepascal";
 
@@ -14,7 +15,7 @@ export const handler: Handlers = {
     const author = form.get("author")?.toString() || "";
     const content = form.get("content")?.toString() || "";
     const source = form.get("source")?.toString() || "";
-    const tags = form.get("tags")?.toString() || "";
+    const tags = form.get("tags")?.toString().split(",") || [];
     const quote = {
       author,
       content,
@@ -22,14 +23,16 @@ export const handler: Handlers = {
       tags,
     };
 
-    const result = new AddQuoteUseCase(quoteRepository);
-
+    const result = await myContainer.get<AddQuoteUseCase>(TYPES.AddQuoteUseCase)
+      .execute({
+        quote,
+      });
     const headers = new Headers();
 
     if (result) {
       headers.set(
         "location",
-        `/quotes/read?id=${id}`,
+        `/quotes/read?id=${result.id}`,
       );
       return new Response(null, {
         status: 303,
@@ -39,15 +42,6 @@ export const handler: Handlers = {
     throw new Error("Oupsi, something went wrong");
   },
 };
-
-function generateUniqueId({ author, tags, content }: Quote): string {
-  const combinedString = `${author}${tags}${content}`;
-
-  const hash = crypto.createHmac("sha256", SECRET).update(combinedString)
-    .digest("hex");
-
-  return hash;
-}
 
 export default function AddQuote() {
   return (

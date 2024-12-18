@@ -1,12 +1,23 @@
+import { injectable } from "inversify";
+
+@injectable()
 class KV {
-  private kv: Deno.Kv | null;
+  private kv: Deno.Kv | null = null;
 
   constructor() {
-    this.kv = null;
   }
 
-  async init(): Promise<void> {
-    this.kv = await Deno.openKv();
+  static async create(): Promise<KV> {
+    const instance = new KV();
+    instance.kv = await Deno.openKv();
+    return instance;
+  }
+
+  getInstance(): Deno.Kv {
+    if (!this.kv) {
+      throw new Error("KV instance not initialized");
+    }
+    return this.kv;
   }
 
   async get<T>(

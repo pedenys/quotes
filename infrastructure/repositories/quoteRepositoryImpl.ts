@@ -1,19 +1,24 @@
+import { inject, injectable } from "inversify";
 import { QuoteDTO, QuoteEntity } from "../../domain/entities/quotes.ts";
 import { QuoteRepository } from "../../domain/repositories/quoteRepository.ts";
 import { KV } from "../kv.ts";
+import { TYPES } from "../../dependancyInjection/tokens.ts";
+import { fromQuoteEntityToQuoteDto } from "../../application/mappers/quotes/toDto.ts";
 
-class QuoteRepositoryImpl implements QuoteRepository {
+@injectable()
+export class QuoteRepositoryImpl implements QuoteRepository {
   private kv: KV;
 
-  constructor(kv: KV) {
+  constructor(@inject(TYPES.KV) kv: KV) {
     this.kv = kv;
   }
 
   async addQuote(quote: QuoteEntity): Promise<QuoteEntity["_id"]> {
     const uniqueId = QuoteEntity.generateUniqueQuoteId(quote);
+    const data = fromQuoteEntityToQuoteDto(quote);
     const identifier = await this.kv.post({
       identifier: uniqueId,
-      value: quote,
+      value: { ...data, id: uniqueId },
       key: "quotes",
     });
 
@@ -34,11 +39,11 @@ class QuoteRepositoryImpl implements QuoteRepository {
       q.value
     );
 
-    if (allQuotes) {
-      return allQuotes.map((q) => new QuoteEntity(q));
-    }
+    console.log("tada !", { allQuotes });
+
+    // if (allQuotes) {
+    //   return allQuotes.map((q) => new QuoteEntity(q));
+    // }
     return null;
   }
 }
-
-export const quoteRepository = new QuoteRepositoryImpl(new KV());

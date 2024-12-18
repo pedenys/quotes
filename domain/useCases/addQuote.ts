@@ -1,13 +1,8 @@
+import { injectable } from "inversify";
 import { QuoteEntity } from "../entities/quotes.ts";
-import { QuoteRepository } from "../repositories/quoteRepository.ts";
 
+@injectable()
 export class AddQuoteDomainUseCase {
-  private quoteRepository: QuoteRepository;
-
-  constructor(quoteRepository: QuoteRepository) {
-    this.quoteRepository = quoteRepository;
-  }
-
   isValidQuote(
     quote: QuoteEntity,
     existingQuotes: QuoteEntity[] | null,
