@@ -9,7 +9,7 @@ import * as $index from "./routes/index.tsx";
 import * as $quotes_add from "./routes/quotes/add.tsx";
 import * as $quotes_index from "./routes/quotes/index.tsx";
 import * as $quotes_read from "./routes/quotes/read.tsx";
-import * as $Counter from "./islands/Counter.tsx";
+import * as $ImageTextDetector from "./islands/ImageTextDetector.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -23,7 +23,7 @@ const manifest = {
     "./routes/quotes/read.tsx": $quotes_read,
   },
   islands: {
-    "./islands/Counter.tsx": $Counter,
+    "./islands/ImageTextDetector.tsx": $ImageTextDetector,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;

@@ -3,6 +3,8 @@ import crypto from "node:crypto";
 import { AddQuoteUseCase } from "../../application/useCases/addQuote.ts";
 import { myContainer } from "../../dependancyInjection/container.ts";
 import { TYPES } from "../../dependancyInjection/tokens.ts";
+import { useSignal } from "@preact/signals";
+import ImageTextDetector from "../../islands/ImageTextDetector.tsx";
 
 export const SECRET = "blaisepascal";
 
@@ -44,6 +46,12 @@ export const handler: Handlers = {
 };
 
 export default function AddQuote() {
+  const contentSignal = useSignal<string>("Est res magna tacere");
+
+  const handleTextDetected = (text: string) => {
+    contentSignal.value = text;
+  };
+
   return (
     <div class="flex items-center justify-center min-h-screen ">
       <div class="w-full max-w-lg p-8 bg-white rounded-lg shadow-md ">
@@ -62,9 +70,11 @@ export default function AddQuote() {
               rows={4}
               class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Enter the quote"
-              defaultValue={"Est res magna tacere"}
+              value={contentSignal.value}
             />
           </div>
+
+          <ImageTextDetector onTextDetected={handleTextDetected} />
 
           <div>
             <label for="author" class="block text-sm font-medium text-gray-700">
