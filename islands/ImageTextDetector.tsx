@@ -275,8 +275,12 @@ export default function ImageTextDetector(
   };
 
   return (
-    <div class="mt-4 p-4 border border-gray-300 rounded-lg bg-gray-50">
-      <h3 class="text-lg font-medium mb-2">Extract Text from Image</h3>
+    <div class="
+    my-4
+    block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+    
+    ">
+      <h3 class="text-lg font-medium mb-4">Extract Text from Image</h3>
 
       <input
         type="file"
@@ -289,7 +293,7 @@ export default function ImageTextDetector(
       <button
         type="button"
         onClick={handleButtonClick}
-        class="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+        class="mb-2 px-4 py-2 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl  text-stone-800 rounded-md hover:bg-blue-600 transition-colors border border-stone-800"
         disabled={isProcessing.value}
       >
         {isProcessing.value ? "Processing..." : "Upload Image"}
@@ -301,7 +305,7 @@ export default function ImageTextDetector(
 
       {imagePreview.value && (
         <div class="mb-4">
-          <p class="text-sm text-gray-600 mb-2">Image Preview:</p>
+          <p class="text-sm text-yellow-50 mb-2">Image Preview:</p>
           <img
             src={imagePreview.value}
             alt="Preview"
@@ -313,7 +317,7 @@ export default function ImageTextDetector(
       {detectedText.value && (
         <div class="mt-4">
           <div class="flex justify-between items-center mb-2">
-            <p class="text-sm font-medium text-gray-700">Detected Text:</p>
+            <p class="text-sm font-medium text-yellow-50">Detected Text:</p>
             <button
               type="button"
               onClick={copyToClipboard}

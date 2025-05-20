@@ -46,7 +46,7 @@ export const handler: Handlers = {
 };
 
 export default function AddQuote() {
-  const contentSignal = useSignal<string>("Est res magna tacere");
+  const contentSignal = useSignal<string>("");
 
   const handleTextDetected = (text: string) => {
     contentSignal.value = text;
@@ -56,7 +56,8 @@ export default function AddQuote() {
     <div class="flex items-center justify-center min-h-screen ">
       <div class="w-full max-w-lg p-8 bg-white rounded-lg shadow-md ">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Add a Quote</h2>
-        <form class="space-y-5" method={"POST"}>
+        <ImageTextDetector onTextDetected={handleTextDetected} />
+        <form class="flex flex-wrap flex-col gap-4" method={"POST"}>
           <div>
             <label
               for="content"
@@ -74,8 +75,6 @@ export default function AddQuote() {
             />
           </div>
 
-          <ImageTextDetector onTextDetected={handleTextDetected} />
-
           <div>
             <label for="author" class="block text-sm font-medium text-gray-700">
               Author
@@ -86,7 +85,6 @@ export default function AddQuote() {
               name="author"
               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
               placeholder="Enter the author's name"
-              defaultValue={"Horace"}
             />
           </div>
 
@@ -100,7 +98,6 @@ export default function AddQuote() {
               name="source"
               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
               placeholder="Enter the source (e.g., book title, page number)"
-              defaultValue={"Nietzsche"}
             />
           </div>
 
@@ -114,13 +111,12 @@ export default function AddQuote() {
               name="tags"
               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
               placeholder="Tags separated by semicolons (e.g., philosophy;wisdom)"
-              defaultValue={"wisdom"}
             />
           </div>
 
           <button
             type="submit"
-            class="text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
+            class="mt-4 text-gray-900 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-100 dark:focus:ring-red-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-full"
           >
             Save Quote
           </button>
