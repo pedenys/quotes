@@ -41,9 +41,9 @@ export class QuoteRepositoryImpl implements QuoteRepository {
 
     console.log("tada !", { allQuotes });
 
-    // if (allQuotes) {
-    //   return allQuotes.map((q) => new QuoteEntity(q));
-    // }
+    if (allQuotes) {
+      return allQuotes.map((q) => new QuoteEntity(q));
+    }
     return null;
   }
 }

@@ -8,6 +8,7 @@ import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
 import * as $quotes_add from "./routes/quotes/add.tsx";
 import * as $quotes_index from "./routes/quotes/index.tsx";
+import * as $quotes_list from "./routes/quotes/list.tsx";
 import * as $quotes_read from "./routes/quotes/read.tsx";
 import * as $ImageTextDetector from "./islands/ImageTextDetector.tsx";
 import type { Manifest } from "$fresh/server.ts";
@@ -20,6 +21,7 @@ const manifest = {
     "./routes/index.tsx": $index,
     "./routes/quotes/add.tsx": $quotes_add,
     "./routes/quotes/index.tsx": $quotes_index,
+    "./routes/quotes/list.tsx": $quotes_list,
     "./routes/quotes/read.tsx": $quotes_read,
   },
   islands: {
