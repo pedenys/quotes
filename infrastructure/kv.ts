@@ -6,16 +6,21 @@ class KV {
   private _kv: Deno.Kv | null = null;
   private _access_token: string | undefined | null;
   constructor() {
-    this._access_token = Deno.env.get("DENO_KV_ACCESS_TOKEN");
+    this._access_token = Deno.env.get("DENO_KV_ACCESS_TOKEN") || undefined;
   }
 
   static async create(): Promise<KV> {
     const instance = new KV();
     const accessToken = instance._access_token;
-    if (!accessToken) {
+    if (
+      !accessToken && Deno.env.get(
+          keys
+            .RUNTIME_ENVIRONMENT,
+        ) === "development"
+    ) {
       throw new Error("Missing access token 💋");
     }
-    instance._kv = Deno.env.get(keys.RUNTIME_ENVIRONMENT) === "development"
+    instance._kv = accessToken
       ? await Deno.openKv(accessToken)
       : await Deno.openKv();
     return instance;
