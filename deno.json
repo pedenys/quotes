@@ -13,11 +13,7 @@
     "dev": "deno run --allow-all --unstable-kv --watch dev.ts"
   },
   "nodeModulesDir": "auto",
-  "lint": {
-    "rules": {
-      "tags": ["fresh", "recommended"]
-    }
-  },
+  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
   "exclude": ["**/_fresh/*"],
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
