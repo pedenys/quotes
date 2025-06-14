@@ -25,25 +25,24 @@ export class QuoteRepositoryImpl implements QuoteRepository {
     return identifier;
   }
 
-  async getQuote(id: string): Promise<QuoteEntity | null> {
+  async getQuote(id: string): Promise<QuoteDTO | null> {
     const quoteDto =
       (await this.kv.get<QuoteDTO>({ key: "quotes", identifier: id })).value;
     if (quoteDto) {
-      return new QuoteEntity(quoteDto);
+      return quoteDto;
     }
     return null;
   }
 
-  async getAllQuotes(): Promise<QuoteEntity[] | null> {
+  async getAllQuotes(): Promise<QuoteDTO[] | null> {
     const allQuotes = (await this.kv.iterator<QuoteDTO>("quotes"))?.map((q) =>
       q.value
     );
 
-    console.log("tada !", { allQuotes });
-
     if (allQuotes) {
-      return allQuotes.map((q) => new QuoteEntity(q));
+      return allQuotes;
     }
+
     return null;
   }
 }

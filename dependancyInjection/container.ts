@@ -8,6 +8,8 @@ import { TYPES } from "./tokens.ts";
 import { Container } from "inversify";
 import { ListQuotesUseCase } from "../application/useCases/listQuotes.ts";
 import { ListQuotesDomainUseCase } from "../domain/useCases/listQuotes.ts";
+import { ReadQuoteUseCase } from "../application/useCases/readQuote.ts";
+import { ReadQuoteDomainUseCase } from "../domain/useCases/readQuote.ts";
 
 const myContainer = new Container();
 async function setupContainer() {
@@ -28,6 +30,11 @@ myContainer.bind<ListQuotesUseCase>(TYPES.ListQuotesUseCase).to(
 );
 myContainer.bind<ListQuotesDomainUseCase>(TYPES.ListQuotesDomainUseCase).to(
   ListQuotesDomainUseCase,
+);
+// read quote
+myContainer.bind<ReadQuoteUseCase>(TYPES.ReadQuoteUseCase).to(ReadQuoteUseCase);
+myContainer.bind<ReadQuoteDomainUseCase>(TYPES.ReadQuoteDomainUseCase).to(
+  ReadQuoteDomainUseCase,
 );
 // quote repository
 myContainer.bind<QuoteRepository>(TYPES.QuoteRepository).to(

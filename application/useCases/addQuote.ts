@@ -1,8 +1,8 @@
+import { inject, injectable } from "inversify";
 import { TYPES } from "../../dependancyInjection/tokens.ts";
 import { QuoteEntity } from "../../domain/entities/quotes.ts";
 import type { QuoteRepository } from "../../domain/repositories/quoteRepository.ts";
 import { AddQuoteDomainUseCase } from "../../domain/useCases/addQuote.ts";
-import { inject, injectable } from "inversify";
 
 type TempInput = {
   tags: QuoteEntity["_tags"];
@@ -37,10 +37,21 @@ export class AddQuoteUseCase {
     const newQuote = new QuoteEntity(input.quote);
 
     // Fetch existing quotes from the repository
-    const existingQuotes = await this._quoteRepository.getAllQuotes();
+    const existingQuotesFound = await this._quoteRepository.getAllQuotes();
+
+    if (!existingQuotesFound) {
+      throw new Error("Could not found existing quotes 🥲");
+    }
+
+    const existingQuotesFoundEntity = existingQuotesFound?.map((q) =>
+      new QuoteEntity(q)
+    );
 
     // Validate the quote using the domain use case
-    this._addQuoteDomainUseCase.isValidQuote(newQuote, existingQuotes);
+    this._addQuoteDomainUseCase.isValidQuote(
+      newQuote,
+      existingQuotesFoundEntity,
+    );
 
     // Persist the quote using the repository
     const identifier = await this._quoteRepository.addQuote(newQuote);

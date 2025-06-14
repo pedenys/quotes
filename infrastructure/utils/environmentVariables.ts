@@ -1,0 +1,4 @@
+export const keys = {
+  RUNTIME_ENVIRONMENT: "RUNTIME_ENVIRONMENT",
+  DENO_ACCESS_TOKEN: "DENO_ACCESS_TOKEN",
+} as const;

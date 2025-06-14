@@ -4,9 +4,9 @@ import type { QuoteRepository } from "../../domain/repositories/quoteRepository.
 import { ListQuotesDomainUseCase } from "../../domain/useCases/listQuotes.ts";
 import { inject, injectable } from "inversify";
 
-interface ListQuotesUseCaseInput {
+type ListQuotesUseCaseInput = {
   filter?: unknown;
-}
+};
 
 interface ListQuotesUseCaseOutput {
   quotes: Array<QuoteEntity>;
@@ -19,7 +19,7 @@ export class ListQuotesUseCase {
 
   constructor(
     @inject(TYPES.QuoteRepository) quoteRepository: QuoteRepository,
-    @inject(TYPES.AddQuoteDomainUseCase) listQuotesDomainUseCase:
+    @inject(TYPES.ListQuotesDomainUseCase) listQuotesDomainUseCase:
       ListQuotesDomainUseCase,
   ) {
     this._quoteRepository = quoteRepository;
@@ -27,16 +27,26 @@ export class ListQuotesUseCase {
   }
 
   async execute(
-    _input: ListQuotesUseCaseInput,
+    _input?: ListQuotesUseCaseInput,
   ): Promise<ListQuotesUseCaseOutput> {
     // Fetch existing quotes from the repository
     const quotes = await this._quoteRepository.getAllQuotes();
 
-    // console.debug("🙇🏻", this._listQuotesDomainUseCase);
-    // // Validate the quote using the domain use case
-    // this._listQuotesDomainUseCase.isValidList(quotes);
+    if (!quotes) {
+      throw new Error("Could not find existing quotes 🥲");
+    }
 
-    // Return the identifier of the added quote
-    return { quotes: quotes! };
+    const quotesEntities = quotes?.map((q) => new QuoteEntity(q));
+    // // Validate the quote using the domain use case
+    try {
+      this._listQuotesDomainUseCase.isValidList(
+        quotesEntities || null,
+      );
+
+      // Return the identifier of the added quote
+      return { quotes: quotesEntities };
+    } catch (error) {
+      throw error;
+    }
   }
 }

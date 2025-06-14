@@ -31,8 +31,11 @@ export default function ListQuotes({ data }: PageProps<PageData>) {
         </p>
       </blockquote>
       <p>{_author || "–"}{_source ? <cite>, {_source}</cite> : ""}</p>
-      {_tags?.split(",").map((tag) => (
-        <pre class="bg-gray-200 text-gray-800 px-2 py-1 rounded inline-block font-mono text-sm mr-2">{tag}</pre>
+      {_tags?.map((tag) => (
+        <>
+          <pre class="bg-gray-200 text-gray-800 px-2 py-1 rounded inline-block font-mono text-sm mr-2">{tag.trim()}</pre>
+          <br />
+        </>
       ))}
     </section>
   ));

@@ -12,6 +12,7 @@
     "update": "deno run -A -r https://fresh.deno.dev/update .",
     "dev": "deno run --allow-all --unstable-kv --watch dev.ts"
   },
+  "nodeModulesDir": "auto",
   "lint": {
     "rules": {
       "tags": ["fresh", "recommended"]
