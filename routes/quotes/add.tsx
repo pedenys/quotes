@@ -1,9 +1,8 @@
 import { Handlers } from "$fresh/server.ts";
-import crypto from "node:crypto";
+import { useSignal } from "@preact/signals";
 import { AddQuoteUseCase } from "../../application/useCases/addQuote.ts";
 import { myContainer } from "../../dependancyInjection/container.ts";
 import { TYPES } from "../../dependancyInjection/tokens.ts";
-import { useSignal } from "@preact/signals";
 import ImageTextDetector from "../../islands/ImageTextDetector.tsx";
 
 export const SECRET = "blaisepascal";
@@ -57,7 +56,7 @@ export default function AddQuote() {
       <div class="w-full max-w-lg p-8 bg-white rounded-lg shadow-md ">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Add a Quote</h2>
         <ImageTextDetector onTextDetected={handleTextDetected} />
-        <form class="flex flex-wrap flex-col gap-4" method={"POST"}>
+        <form class="flex flex-wrap flex-col gap-4" method="POST">
           <div>
             <label
               for="content"

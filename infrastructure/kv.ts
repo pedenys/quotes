@@ -1,32 +1,40 @@
 import { injectable } from "inversify";
+import { keys } from "./utils/environmentVariables.ts";
 
 @injectable()
 class KV {
-  private kv: Deno.Kv | null = null;
-
+  private _kv: Deno.Kv | null = null;
+  private _access_token: string | undefined | null;
   constructor() {
+    this._access_token = Deno.env.get("DENO_KV_ACCESS_TOKEN");
   }
 
   static async create(): Promise<KV> {
     const instance = new KV();
-    instance.kv = await Deno.openKv();
+    const accessToken = instance._access_token;
+    if (!accessToken) {
+      throw new Error("Missing access token 💋");
+    }
+    instance._kv = Deno.env.get(keys.RUNTIME_ENVIRONMENT) === "development"
+      ? await Deno.openKv(accessToken)
+      : await Deno.openKv();
     return instance;
   }
 
   getInstance(): Deno.Kv {
-    if (!this.kv) {
+    if (!this._kv) {
       throw new Error("KV instance not initialized");
     }
-    return this.kv;
+    return this._kv;
   }
 
   async get<T>(
     { key, identifier }: { key: string; identifier: string },
   ): Promise<Deno.KvEntryMaybe<T>> {
-    if (!this.kv) {
+    if (!this._kv) {
       throw new Error("KV instance not initialized");
     }
-    return await this.kv.get([key, identifier]);
+    return await this._kv.get([key, identifier]);
   }
 
   async post<T>(
@@ -36,10 +44,10 @@ class KV {
       identifier: string;
     },
   ): Promise<string> {
-    if (!this.kv) {
+    if (!this._kv) {
       throw new Error("KV instance not initialized");
     }
-    const result = await this.kv.atomic().set([key, identifier], value)
+    const result = await this._kv.atomic().set([key, identifier], value)
       .commit();
     if (identifier && result.ok) {
       return identifier;
@@ -50,7 +58,7 @@ class KV {
   async iterator<T>(
     prefix: string,
   ): Promise<Deno.KvEntry<T>[]> {
-    if (!this.kv) {
+    if (!this._kv) {
       throw new Error("KV instance not initialized");
     }
 
