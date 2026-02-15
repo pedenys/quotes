@@ -6,7 +6,7 @@ export class ListQuotesDomainUseCase {
   isValidList(
     quotes: Array<QuoteEntity> | null,
   ): void {
-    if (!quotes || !Array.isArray(quotes) || quotes.length === 0) {
+    if (!quotes || !Array.isArray(quotes)) {
       throw new Error("List of quotes is not valid");
     }
   }

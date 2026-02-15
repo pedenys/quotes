@@ -10,11 +10,20 @@
     "build": "deno run -A --unstable-kv dev.ts build",
     "preview": "deno run -A --unstable-kv main.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update .",
-    "dev": "deno run --allow-all --unstable-kv --watch dev.ts"
+    "dev": "deno run --allow-all --unstable-kv --env --watch dev.ts"
   },
   "nodeModulesDir": "auto",
-  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
-  "exclude": ["**/_fresh/*"],
+  "lint": {
+    "rules": {
+      "tags": [
+        "fresh",
+        "recommended"
+      ]
+    }
+  },
+  "exclude": [
+    "**/_fresh/*"
+  ],
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
     "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.46.1",

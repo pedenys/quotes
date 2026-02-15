@@ -37,16 +37,13 @@ export class ListQuotesUseCase {
     }
 
     const quotesEntities = quotes?.map((q) => new QuoteEntity(q));
-    // // Validate the quote using the domain use case
-    try {
-      this._listQuotesDomainUseCase.isValidList(
-        quotesEntities || null,
-      );
 
-      // Return the identifier of the added quote
-      return { quotes: quotesEntities };
-    } catch (error) {
-      throw error;
-    }
+    // Validate the quote using the domain use case
+    this._listQuotesDomainUseCase.isValidList(
+      quotesEntities || null,
+    );
+
+    // Return the list of quotes
+    return { quotes: quotesEntities };
   }
 }

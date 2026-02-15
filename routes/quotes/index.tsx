@@ -23,7 +23,6 @@ export const handler: Handlers = {
 
 export default function ReadQuote({ data }: PageProps<PageData>) {
   const { quotes } = data;
-  console.log({ data, quotes });
 
   return quotes.map((q) => ({
     content: q.getContent(),

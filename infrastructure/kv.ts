@@ -12,6 +12,8 @@ class KV {
   static async create(): Promise<KV> {
     const instance = new KV();
     const accessToken = instance._access_token;
+    const kvUrl = Deno.env.get("DENO_KV_URL");
+
     if (
       !accessToken && Deno.env.get(
           keys
@@ -20,9 +22,12 @@ class KV {
     ) {
       throw new Error("Missing access token 💋");
     }
-    instance._kv = accessToken
-      ? await Deno.openKv(accessToken)
+
+    // If KV URL is provided, use it; otherwise use default (local or remote based on env)
+    instance._kv = kvUrl
+      ? await Deno.openKv(kvUrl)
       : await Deno.openKv();
+
     return instance;
   }
 
@@ -67,10 +72,11 @@ class KV {
       throw new Error("KV instance not initialized");
     }
 
-    const kv = await Deno.openKv();
-    const iter = kv.list<T>({ prefix: [prefix] });
+    const iter = this._kv.list<T>({ prefix: [prefix] });
     const result = [];
-    for await (const res of iter) result.push(res);
+    for await (const res of iter) {
+      result.push(res);
+    }
     return result;
   }
 }

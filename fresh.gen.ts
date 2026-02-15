@@ -10,6 +10,7 @@ import * as $quotes_add from "./routes/quotes/add.tsx";
 import * as $quotes_index from "./routes/quotes/index.tsx";
 import * as $quotes_list from "./routes/quotes/list.tsx";
 import * as $quotes_read from "./routes/quotes/read.tsx";
+import * as $ExportButton from "./islands/ExportButton.tsx";
 import * as $ImageTextDetector from "./islands/ImageTextDetector.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
@@ -25,6 +26,7 @@ const manifest = {
     "./routes/quotes/read.tsx": $quotes_read,
   },
   islands: {
+    "./islands/ExportButton.tsx": $ExportButton,
     "./islands/ImageTextDetector.tsx": $ImageTextDetector,
   },
   baseUrl: import.meta.url,
