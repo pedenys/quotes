@@ -1,6 +1,6 @@
 # Quote saver
 
-A simple application to store quotes. Made with
+A simple application to store quotes using Deno KV (beta). Made with
 [Fresh](https://fresh.deno.dev/docs/getting-started)
 
 ## Usage
